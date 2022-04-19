@@ -1,2 +1,3 @@
 chess
+git+https://github.com/accessibleapps/keyboard_handler.git
 wxPython
