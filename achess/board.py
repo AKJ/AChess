@@ -15,10 +15,12 @@ class ChessBoard(wx.Panel):
 		self.marked = ""
 		self.register_keys()
 
+	def checkLocation(self):
+		if self.location not in chess.SQUARES:
+			raise ValueError("Error: {} not in chessboard.".format(self.location))
+
 	def readSquare(self, loc):
-		if loc not in chess.SQUARES:
-			print("Error: not on chessboard.")
-			return
+		self.checkLocation()	
 
 		square = chess.square_name(loc)
 		piece = self.board.piece_at(loc)
@@ -39,45 +41,28 @@ class ChessBoard(wx.Panel):
 		self.handler.register_key("space", self.handle_space)
 		
 	def handle_up(self):
-		if self.location not in chess.SQUARES:
-			print("Error: Not in chessboard.")
-			return
-		if self.location in range(56, 63):
-			self.readSquare(self.location)
-		else:
+		self.checkLocation()
+		if self.location not in range(56, 63):
 			self.location = self.location+8
-			self.readSquare(self.location)
-
+		self.readSquare(self.location)
 
 	def handle_down(self):
-		if self.location not in chess.SQUARES:
-			print("Error: not in chessboard.")
-			return
-		if self.location in range(0, 7):
-			self.readSquare(self.location)
-		else:
+		self.checkLocation()
+		if self.location not in range(0, 7):
 			self.location = self.location - 8
-			self.readSquare(self.location)
+		self.readSquare(self.location)
 
 	def handle_left(self):
-		if self.location not in chess.SQUARES:
-			print("Error: Not in chessboard.")
-			return
-		if self.location in range(0, 56, 8):
-			self.readSquare(self.location)
-		else:
+		self.checkLocation()
+		if self.location not in range(0, 56, 8):
 			self.location = self.location - 1
-			self.readSquare(self.location)
+		self.readSquare(self.location)
 
 	def handle_right(self):
-		if self.location not in chess.SQUARES:
-			print("Error: Not on chessboard.")
-			return
-		if self.location in range(7, 63, 8):
-			self.readSquare(self.location)
-		else:
+		self.checkLocation()
+		if self.location not in range(7, 63, 8):
 			self.location = self.location + 1
-			self.readSquare(self.location)
+		self.readSquare(self.location)
 
 	def handle_space(self):
 		piece = self.board.piece_at(self.location)
