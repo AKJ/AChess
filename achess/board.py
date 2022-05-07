@@ -15,11 +15,14 @@ class ChessBoard(wx.Panel):
 		self.marked = ""
 		self.register_keys()
 
+
+
 	def checkLocation(self):
 		if self.location not in chess.SQUARES:
 			raise ValueError("Error: {} not in chessboard.".format(self.location))
 
-	def readSquare(self, loc):
+
+	def announceSquare(self, loc):
 		self.checkLocation()	
 
 		square = chess.square_name(loc)
@@ -44,25 +47,25 @@ class ChessBoard(wx.Panel):
 		self.checkLocation()
 		if self.location not in range(56, 63):
 			self.location = self.location+8
-		self.readSquare(self.location)
+		self.announceSquare(self.location)
 
 	def handle_down(self):
 		self.checkLocation()
 		if self.location not in range(0, 7):
 			self.location = self.location - 8
-		self.readSquare(self.location)
+		self.announceSquare(self.location)
 
 	def handle_left(self):
 		self.checkLocation()
 		if self.location not in range(0, 56, 8):
 			self.location = self.location - 1
-		self.readSquare(self.location)
+		self.announceSquare(self.location)
 
 	def handle_right(self):
 		self.checkLocation()
 		if self.location not in range(7, 63, 8):
 			self.location = self.location + 1
-		self.readSquare(self.location)
+		self.announceSquare(self.location)
 
 	def handle_space(self):
 		piece = self.board.piece_at(self.location)
