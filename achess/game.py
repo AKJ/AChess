@@ -1,7 +1,7 @@
 import chess
 import output
 
-class Game():
+class ChessGame():
 	def __init__(self, board, colors, focus, *args, **kwargs):
 		self.board = chess.Board()
 		self.colors = ['Black', 'White']
@@ -26,6 +26,7 @@ class Game():
 	def setFocus(self, loc):
 		self.checkLocation(loc)
 		self.focus = loc
+		return loc
 
 	def move(self, start, end):
 		self.checkLocation(start)
