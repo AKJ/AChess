@@ -2,10 +2,10 @@ import chess
 import output
 
 class ChessGame():
-	def __init__(self, board, colors, focus, *args, **kwargs):
+	def __init__(self, *args, **kwargs):
 		self.board = chess.Board()
 		self.colors = ['Black', 'White']
-		self.focus = 0 # For now
+		self.focus = 0 # Should game have focus, or board?
 
 	def checkLocation(self, loc):
 		if loc not in chess.SQUARES:
@@ -16,8 +16,9 @@ class ChessGame():
 
 		squareData = {}
 		squareData["name"] = chess.square_name(loc)
-		squareData["piece"] = self.board.piece_type_at(loc)
-		squareData["color"] = self.colors[self.board.color_at(loc)]
+		squareData["piece"] = chess.piece_name(self.board.piece_type_at(loc))
+		if squareData["piece"]:
+			squareData["color"] = self.colors[self.board.color_at(loc)]
 		return squareData
 
 	def getTurn(self):
@@ -28,16 +29,19 @@ class ChessGame():
 		self.focus = loc
 		return loc
 
-	def move(self, start, end):
+	def move(self, start, end, promotion=None):
+		capturestring = ""
 		self.checkLocation(start)
 		self.checkLocation(end)
+		turn = self.getTurn()
 		startSquare = self.getSquareData(start)
 		endSquare = self.getSquareData(end)
-		move = chess.Move(start, end)
+		move = chess.Move(start, end, promotion)
 		if move not in self.board.legal_moves:
 			output.say("Illegal move!")
 		else:
 			self.board.push(move)
 		movestring = "Moved {} {} from {} to {}".format(startSquare["color"], startSquare["piece"], startSquare["name"], endSquare["name"])
-		capturestring = "Captured {}.".format(endSquare["piece"])
-		output.say(f"{movestring}. {capturestring}.")
+		if endSquare["piece"]:
+			capturestring = "Captured {}".format(endSquare["piece"])
+		output.say("{}. {}".format(movestring, capturestring))
