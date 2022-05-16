@@ -1,7 +1,8 @@
 import chess
+import wx
+
 import game
 import output
-import wx
 
 class ChessBoard(wx.Panel):
 	def __init__(self, parent, id, *args, **kwargs):
@@ -17,6 +18,14 @@ class ChessBoard(wx.Panel):
 		if end["piece"]:
 			capturestring = "Captured {}".format(end["piece"])
 		output.say("{}. {}".format(movestring, capturestring))
+
+	def announceOutcome(self, board):
+		if board.is_checkmate():
+			output.say("Checkmate. {} wins!".format(self.colors[board.outcome().winner]))
+		elif board.is_check():
+			output.say("Check.")
+		else:
+			return
 
 	def announceSquare(self, loc):
 		square = self.game.getSquareData(self.board, loc)
@@ -40,7 +49,9 @@ class ChessBoard(wx.Panel):
 		elif self.marked and self.marked != loc:
 			move, start, end = game.validateMove(board, loc, self.marked)
 			if move:
+				board.push(move)
 				self.announceMove(self, start, end)
+				self.announceOutcome(self, board)
 		else:
 			output.say("Unexpected error.")
 
@@ -61,5 +72,3 @@ class ChessBoard(wx.Panel):
 			return
 		focus = result
 		self.announceSquare(result)
-
-	
