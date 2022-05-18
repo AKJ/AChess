@@ -30,9 +30,9 @@ class ChessBoard(wx.Panel):
 	def announceSquare(self, loc):
 		square = self.game.getSquareData(self.board, loc)
 		if not square.piece:
-			msg = f"{square.name}"
+			msg = "{}".format(square["name"])
 		else:
-			msg = f"{square.name} {square.color} {square.piece}"
+			msg = "{}, {} {}.".format(square["name"], square["color"], square["piece"])
 		output.say(msg)
 
 	def mark(self, board, loc):
