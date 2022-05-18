@@ -47,11 +47,15 @@ class ChessBoard(wx.Panel):
 			self.marked = None
 			output.say("{} unmarked.".format(square["piece"]))
 		elif self.marked and self.marked != loc:
-			move, start, end = game.validateMove(board, loc, self.marked)
-			if move:
-				board.push(move)
-				self.announceMove(self, start, end)
-				self.announceOutcome(self, board)
+			self.handle_move(self.board, self.marked, loc)
+
+	def handle_move(self, board, start, end, promotion=None):
+		move, start, end, promoted = game.validateMove(board, start, end, promotion)
+		if move:
+			board.push(move)
+			self.marked = None
+			self.announceMove(self, start, end)
+			self.announceOutcome(self, board)
 		else:
 			output.say("Unexpected error.")
 
